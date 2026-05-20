@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DuoDopa / LECIGON – Ambulanz THS &amp; Pumpentherapien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0b0f14; --surface:#111720; --surface2:#161d27;
+      --border:#1e2a38; --text:#dde6f0; --muted:#5a7190;
+      --accent:#4a9eca; --accent-dim:rgba(74,158,202,0.10);
+      --warn:#e07b54; --warn-dim:rgba(224,123,84,0.08);
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Source Sans 3',sans-serif; font-weight:300; min-height:100vh; }
+
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.1rem 3rem; border-bottom:1px solid var(--border);
+      background:rgba(11,15,20,0.92); backdrop-filter:blur(14px);
+    }
+    .nav-logo { font-family:'Roboto',sans-serif; font-size:1.1rem; font-weight:400; color:var(--text); text-decoration:none; letter-spacing:0.02em; max-width:340px; line-height:1.3; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:0; list-style:none; }
+    .nav-links li a { display:block; padding:0.45rem 1.1rem; font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; border:1px solid transparent; transition:all 0.2s; }
+    .nav-links li a:hover { color:var(--accent); border-color:var(--border); background:var(--surface); }
+    .nav-links li a.active { color:var(--accent); border-color:var(--accent-dim); background:var(--accent-dim); }
+
+    .page-wrapper { max-width:900px; margin:0 auto; padding:7rem 3rem 5rem; }
+
+    .breadcrumb { font-size:0.72rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; opacity:0; animation:fadeUp 0.7s 0.05s forwards; }
+    .breadcrumb a { color:var(--muted); text-decoration:none; transition:color 0.2s; }
+    .breadcrumb a:hover { color:var(--accent); }
+    .breadcrumb span { color:var(--accent); }
+
+    .page-header { padding-bottom:2.5rem; border-bottom:1px solid var(--border); margin-bottom:3rem; opacity:0; animation:fadeUp 0.9s 0.1s forwards; }
+    .page-eyebrow { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
+    .page-title { font-family:'Roboto',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:400; line-height:1.1; }
+    .page-subtitle { font-size:1.0rem; color:var(--muted); margin-top:0.6rem; }
+
+    .intro-card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:2rem 2.2rem; margin-bottom:2.5rem; opacity:0; animation:fadeUp 0.9s 0.15s forwards; }
+    .intro-card p { font-size:1.2rem; line-height:1.95; color:#b0c4d8; margin-bottom:0.9rem; }
+    .intro-card p:last-child { margin-bottom:0; }
+
+    .content-section { margin-bottom:2.8rem; opacity:0; animation:fadeUp 0.9s forwards; }
+    .content-section:nth-of-type(1){animation-delay:0.2s}
+    .content-section:nth-of-type(2){animation-delay:0.28s}
+    .content-section:nth-of-type(3){animation-delay:0.36s}
+    .content-section:nth-of-type(4){animation-delay:0.44s}
+    .content-section:nth-of-type(5){animation-delay:0.52s}
+
+    .section-heading { font-family:'Roboto',sans-serif; font-size:1.1rem; font-weight:500; color:var(--text); padding-bottom:0.6rem; border-bottom:1px solid var(--border); margin-bottom:1.4rem; }
+    .section-divider { height:1px; background:var(--border); margin:2.5rem 0; }
+    .subheading { font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); font-weight:500; margin:1.4rem 0 0.6rem; }
+
+    .info-p { font-size:1.0rem; line-height:1.9; color:#b0c4d8; margin-bottom:1rem; }
+    .info-p:last-child { margin-bottom:0; }
+    .info-p a { color:var(--accent); text-decoration:none; }
+    .info-p a:hover { text-decoration:underline; }
+    .info-p strong { color:var(--text); font-weight:500; }
+
+    /* numbered problems */
+    .problem-list { list-style:none; padding:0; margin:0; counter-reset:prob; }
+    .problem-item {
+      counter-increment:prob;
+      margin-bottom:1rem;
+      background:var(--surface); border:1px solid var(--border);
+      border-left:3px solid var(--warn);
+      padding:1.4rem 1.6rem 1.4rem 2rem;
+      position:relative;
+    }
+    .problem-item::before {
+      content:counter(prob);
+      position:absolute; left:-1px; top:0;
+      background:var(--warn); color:var(--bg);
+      font-size:0.72rem; font-weight:500;
+      padding:0.2rem 0.45rem;
+      line-height:1.4;
+    }
+    .problem-item h3 { font-family:'Roboto',sans-serif; font-size:0.95rem; font-weight:500; color:var(--warn); margin-bottom:0.7rem; margin-top:0.3rem; }
+    .problem-item p { font-size:0.98rem; line-height:1.85; color:#b0c4d8; margin-bottom:0.6rem; }
+    .problem-item p:last-child { margin-bottom:0; }
+    .problem-item ul { list-style:none; padding:0; margin:0.5rem 0; }
+    .problem-item ul li { font-size:0.95rem; line-height:1.8; color:#b0c4d8; padding:0.25rem 0 0.25rem 1.3rem; position:relative; }
+    .problem-item ul li::before { content:'›'; position:absolute; left:0; color:var(--warn); font-size:1.0rem; line-height:1.7; }
+    .problem-item a { color:var(--accent); text-decoration:none; }
+    .problem-item a:hover { text-decoration:underline; }
+    .problem-item strong { color:var(--text); font-weight:500; }
+
+    /* FAQ */
+    .faq-item { border:1px solid var(--border); margin-bottom:0.6rem; overflow:hidden; transition:border-color 0.2s; }
+    .faq-item.open { border-color:var(--accent); }
+    .faq-question { width:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.1rem 1.5rem; background:var(--surface); border:none; color:var(--text); font-family:'Source Sans 3',sans-serif; font-size:1.0rem; font-weight:400; text-align:left; cursor:pointer; transition:background 0.2s,color 0.2s; }
+    .faq-question:hover, .faq-item.open .faq-question { background:var(--surface2); color:var(--accent); }
+    .faq-chevron { flex-shrink:0; font-size:0.75rem; color:var(--accent); transition:transform 0.3s; }
+    .faq-item.open .faq-chevron { transform:rotate(180deg); }
+    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.38s ease,padding 0.25s ease; background:var(--bg); padding:0 1.5rem; }
+    .faq-item.open .faq-answer { max-height:3000px; padding:1.3rem 1.5rem 1.5rem; }
+    .faq-answer p { font-size:0.98rem; line-height:1.9; color:#b0c4d8; margin-bottom:0.9rem; }
+    .faq-answer p:last-child { margin-bottom:0; }
+    .faq-answer ul { list-style:none; padding:0; margin:0.5rem 0 1rem; }
+    .faq-answer ul li { font-size:0.98rem; line-height:1.85; color:#b0c4d8; padding:0.3rem 0 0.3rem 1.4rem; position:relative; }
+    .faq-answer ul li::before { content:'›'; position:absolute; left:0; color:var(--accent); font-size:1.1rem; line-height:1.7; }
+    .faq-answer a { color:var(--accent); text-decoration:none; }
+    .faq-answer a:hover { text-decoration:underline; }
+    .faq-answer strong { color:var(--text); font-weight:500; }
+
+    /* contact box */
+    .contact-box { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:1.2rem 1.5rem; margin-top:1rem; font-size:0.95rem; line-height:1.85; color:#b0c4d8; }
+    .contact-box a { color:var(--accent); text-decoration:none; }
+    .contact-box a:hover { text-decoration:underline; }
+
+    .back-link { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; transition:color 0.2s; margin-top:2rem; }
+    .back-link:hover { color:var(--accent); }
+
+    footer { border-top:1px solid var(--border); padding:1.8rem 3rem; display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; letter-spacing:0.08em; color:var(--text); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    @media(max-width:700px){
+      nav{padding:1rem 1.2rem;flex-wrap:wrap;gap:0.8rem;}
+      .nav-logo{font-size:0.9rem;max-width:200px;}
+      .nav-links li a{padding:0.4rem 0.65rem;font-size:0.65rem;}
+      .page-wrapper{padding:7.5rem 1.5rem 4rem;}
+      footer{flex-direction:column;gap:0.5rem;text-align:center;}
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Ambulanz für<br><span>Tiefe Hirnstimulation</span> und Pumpentherapien</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="neuvorsteller.html">Neuvorsteller</a></li>
+      <li><a href="pumpentherapie.html" class="active">Pumpentherapie</a></li>
+      <li><a href="tiefe-hirnstimulation.html">Tiefe Hirnstimulation</a></li>
+      <li><a href="weiteres.html">Weiteres</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="breadcrumb">
+      <a href="pumpentherapie.html">Pumpentherapie</a>
+      <span>›</span>
+      <span>DuoDopa / LECIGON</span>
+    </div>
+
+    <div class="page-header">
+      <p class="page-eyebrow">Intestinale Pumpentherapie · AbbVie &amp; Stada</p>
+      <h1 class="page-title">DuoDopa / LECIGON</h1>
+      <p class="page-subtitle">Levodopa/Carbidopa (DuoDopa) · Levodopa/Carbidopa/Entacapon (LECIGON)</p>
+    </div>
+
+    <!-- INTRO -->
+    <div class="intro-card">
+      <p>Willkommen im Bereich DuoDopa/LECIGON. Hier finden Sie wichtige Informationen rund um die Themen DuoDopa- oder LECIGON-Therapie sowie häufig gestellte Fragen zur intestinalen Pumpentherapie.</p>
+      <p>Haben Sie Probleme bei der intestinalen Pumpentherapie? Schauen Sie in die unten stehenden Rubriken, um Antworten zu finden.</p>
+    </div>
+
+    <!-- PROBLEMS -->
+    <div class="content-section">
+      <h2 class="section-heading">Häufige Probleme und was zu tun ist</h2>
+
+      <ol class="problem-list">
+
+        <li class="problem-item">
+          <h3>Der jejunale oder gastrale Anteil der Sonde hat sich verschoben oder gelöst, oder ein Arm der Sonde lässt sich nicht mehr spülen</h3>
+          <p>Bitten Sie <strong>Stada Care</strong> um einen Besuch, um vor Ort eine Lösung zu suchen.</p>
+          <p>Sollte die Sonde gewechselt werden müssen, können Sie in der <strong>Ortenauklinik Wolfach</strong> nach einem ambulanten Termin fragen, wenn Sie dort bereits bekannt sind.</p>
+          <p>Anderenfalls schreiben Sie uns bitte eine E-Mail mit folgenden Angaben im Betreff: <strong>Name, Geburtsdatum, „Sondenwechsel"</strong>. Im Text bitte vermerken:</p>
+          <ul>
+            <li>Aktuelle Einnahme von Blutverdünnern?</li>
+            <li>Stationär gesetzlich oder privat (zusatz-)versichert?</li>
+            <li>Selbst einwilligungsberechtigt oder Angabe des gesetzlichen Vormunds</li>
+            <li>Telefonische Erreichbarkeit</li>
+          </ul>
+          <p>Wir melden Sie danach für einen stationären Wechsel (2–3 Tage Aufenthalt) im UKT an. Das Fallmanagement wird telefonisch einen Termin mit Ihnen planen. <strong>Bitte rechnen Sie mit Wartezeiten von 1–4 Wochen.</strong></p>
+          <p>Zur Überbrückung steigen Sie bitte auf eine orale Medikation um (Notfallschema s. Entlassbrief). Nach Absprache kann die kontinuierliche Therapie mithilfe eines Stufenadapters auf den gastralen Schenkel der Sonde umgeleitet werden.</p>
+        </li>
+
+        <li class="problem-item">
+          <h3>Die Einstichstelle ist entzündet, schmerzhaft, gerötet oder bildet Sekret (selten: Hypergranulation)</h3>
+          <p>Wenden Sie sich bitte an Ihren <strong>Haus- oder Hautarzt vor Ort</strong>.</p>
+          <p>Bei <strong>Fieber und starken Schmerzen</strong> suchen Sie die Notaufnahme Ihres ortsnahen Krankenhauses auf.</p>
+        </li>
+
+        <li class="problem-item">
+          <h3>Sie benötigen vermehrt eine Extradosis oder haben zunehmende Wirkschwankungen</h3>
+          <p>Beschreiben Sie Ihre Symptome in einer E-Mail an uns. Eventuell ist eine Lagekontrolle im UKT notwendig, um die korrekte Lage der jejunalen Sonde zu bestimmen.</p>
+        </li>
+
+        <li class="problem-item">
+          <h3>Teile der Sonde (Schrauben, Halteplatten) haben sich gelöst, der Schlauch ist porös oder hat Risse</h3>
+          <p>Wenden Sie sich für eine Ersteinschätzung und ggf. Reparatur an <strong>Stada Care</strong>. Sollte ein Wechsel der Sonde nötig sein, werden wir dies gemeinsam planen.</p>
+        </li>
+
+      </ol>
+
+      <div class="contact-box" style="margin-top:1.5rem;">
+        Bei <strong>technischen Fragen</strong> wenden Sie sich primär an den Stada Care Service.<br>
+        Bei <strong>medizinischen Fragen</strong> schreiben Sie uns: <a href="mailto:ths-pumpentherapie@med.uni-tuebingen.de">ths-pumpentherapie@med.uni-tuebingen.de</a><br>
+        Betreff: <em>Name, Geburtsdatum, „medizinische Frage/Pumpe"</em>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- FAQ -->
+    <div class="content-section">
+      <h2 class="section-heading">Häufig gestellte Fragen zu DuoDopa / LECIGON</h2>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Wer führt mich in die Bedienung der Pumpe ein?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Zu Beginn der Pumpentherapie wird das Team von <strong>AbbVie Care (DuoDopa®)</strong> oder der Pumpenservice von <strong>Stada (LECIGON®)</strong> Sie und ggf. auch Ihre Angehörigen in die Bedienung der Pumpe einweisen. Im Nachgang steht Ihr Pumpenservice auch außerhalb des Krankenhausaufenthaltes für Fragen zur Verfügung. Bei Bedarf kann Ihnen auch das ärztliche und pflegerische Team der Pumpenambulanz behilflich sein.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Welcher Wirkstoff ist in den Patronen enthalten?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p><strong>DuoDopa®</strong> enthält Levodopa + Carbidopa.</p>
+          <p><strong>LECIGON®</strong> enthält Levodopa + Carbidopa + Entacapon. Die zusätzliche Gabe von Entacapon bewirkt, dass das Levodopa weniger stark abgebaut wird und dem Körper somit länger zur Verfügung steht.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Welche Lebensdauer ist von der Pumpe zu erwarten?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Wir haben Patienten mit einer DuoDopa®-Pumpe, die bereits seit <strong>über 15 Jahren</strong> behandelt werden und weiterhin ein gutes Ansprechen zeigen. Da LECIGON® erst seit 2021 in Deutschland erhältlich ist, liegen noch keine Langzeitdaten speziell zu dieser Pumpe vor. Es ist jedoch davon auszugehen, dass sich die Lebensdauer der beiden Pumpen nicht wesentlich unterscheidet.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Wie wirkt die Medikation über die Pumpe?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Das Medikament wird als dopaminhaltiges Gel mittels der Pumpe über den Schlauch kontinuierlich in den Dünndarm verabreicht. Dort wird es aufgenommen und gelangt über den Blutweg zum Gehirn, wo es zur Aufrechterhaltung der Beweglichkeit beiträgt.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Kann ich die Flussraten alleine ein- und umstellen?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>In Absprache mit Ihrem Arzt/Ihrer Ärztin können die Laufraten eigenständig angepasst werden. Die Pumpe kann vom Patienten selbst ein- und ausgeschaltet werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Wie wird die Pumpe oder der Schlauch gereinigt?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Nach dem Ein- und Ausschalten der Pumpe morgens und abends wird der Schlauch mit Wasser oder einer Spülflüssigkeit gereinigt. Auf eine gute Hygiene rund um die Einstichstelle sollte stets geachtet werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>An wen muss ich mich bei Nachschub der Patronen wenden?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Bei Implantation auf der Station wird Ihnen erklärt, welche Apotheken in Ihrer Umgebung mit der Beschaffung der Medikation vertraut sind. Gegebenenfalls kann auch Kontakt zu Ihrem Pumpenvertreter aufgenommen werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Kann die Pumpe auch über die Nacht laufen?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Für gewöhnlich läuft die Pumpe während der Wachstunden (z. B. 06:00–22:00 Uhr). In ausgewählten Fällen bei starker motorischer Beeinträchtigung in der Nacht kann die Pumpe aber auch <strong>kontinuierlich rund um die Uhr</strong> laufen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Welche Faktoren beeinflussen die Wirkung der Medikation?</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p>Grundsätzlich kann die Essensaufnahme – besonders <strong>proteinreiche Ernährung</strong> – die Aufnahme des Dopamins im Dünndarm beeinträchtigen. So kann es vorkommen, dass leichtere Schwankungen der Beweglichkeit nach der Essenseinnahme auftreten, auch bei gleichbleibender Pumpen-Laufrate.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Ansprechpartner beim Pumpenhersteller</span>
+          <span class="faq-chevron">▼</span>
+        </button>
+        <div class="faq-answer">
+          <p><strong>DuoDopa® und ProDuodopa® – AbbVie</strong></p>
+          <ul>
+            <li>AbbVie Care-Hotline: <strong>0800-222 8430</strong></li>
+            <li><a href="http://www.abbvie-care.de/parkinson" target="_blank" rel="noopener">www.abbvie-care.de/parkinson</a></li>
+            <li>Schulungsmaterial: <a href="https://www.arzneimittelsuche.abbvie.de/content/dam/abbvie-sitegenerator-ous/arzneimittelsuche/product/duodopa/Duodopa-Patientenleitfaden.pdf" target="_blank" rel="noopener">DuoDopa Patientenleitfaden (PDF)</a></li>
+          </ul>
+          <p style="margin-top:0.8rem;"><strong>LECIGON® – StadaCare</strong></p>
+          <ul>
+            <li>StadaCare Hotline: <strong>0800-0010684</strong></li>
+            <li><a href="mailto:M.Heininger@viluavitartis.de">M.Heininger@viluavitartis.de</a> · 0151-580 60 341</li>
+            <li><a href="mailto:M.Hansen@viluavitartis.de">M.Hansen@viluavitartis.de</a> · 0151-580 60 346</li>
+          </ul>
+          <div class="contact-box">
+            Unsere Ambulanz ist telefonisch erreichbar <strong>Dienstag und Mittwoch 9–11 Uhr</strong><br>
+            Tel: <strong>07071 / 29-85483</strong><br>
+            E-Mail: <a href="mailto:THS-Pumpentherapie@med.uni-tuebingen.de">THS-Pumpentherapie@med.uni-tuebingen.de</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /faq -->
+
+    <a href="pumpentherapie.html" class="back-link">← Zurück zur Pumpentherapie</a>
+
+  </div>
+
+  <footer>
+    <span>Ambulanz für Tiefe Hirnstimulation und Pumpentherapien</span>
+    <span>PKlocke.github.io</span>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-question').setAttribute('aria-expanded','false'); });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bereits implantierte Schrittmacher – Ambulanz THS &amp; Pumpentherapien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b0f14; --surface:#111720; --surface2:#161d27; --border:#1e2a38; --text:#dde6f0; --muted:#5a7190; --accent:#4a9eca; --accent-dim:rgba(74,158,202,0.10); --warn:#e07b54; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Source Sans 3',sans-serif; font-weight:300; min-height:100vh; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.1rem 3rem; border-bottom:1px solid var(--border); background:rgba(11,15,20,0.92); backdrop-filter:blur(14px); }
+    .nav-logo { font-family:'Roboto',sans-serif; font-size:1.2rem; font-weight:400; color:var(--text); text-decoration:none; letter-spacing:0.02em; max-width:340px; line-height:1.3; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:0; list-style:none; }
+    .nav-links li a { display:block; padding:0.45rem 1.1rem; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; border:1px solid transparent; transition:all 0.2s; }
+    .nav-links li a:hover { color:var(--accent); border-color:var(--border); background:var(--surface); }
+    .nav-links li a.active { color:var(--accent); border-color:var(--accent-dim); background:var(--accent-dim); }
+    .page-wrapper { max-width:900px; margin:0 auto; padding:7rem 3rem 5rem; }
+    .breadcrumb { font-size:0.72rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; opacity:0; animation:fadeUp 0.7s 0.05s forwards; }
+    .breadcrumb a { color:var(--muted); text-decoration:none; transition:color 0.2s; }
+    .breadcrumb a:hover { color:var(--accent); }
+    .breadcrumb span { color:var(--accent); }
+    .page-header { padding-bottom:2.5rem; border-bottom:1px solid var(--border); margin-bottom:3rem; opacity:0; animation:fadeUp 0.9s 0.1s forwards; }
+    .page-eyebrow { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
+    .page-title { font-family:'Roboto',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:400; line-height:1.1; }
+    .intro-card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:2rem 2.2rem; margin-bottom:2.5rem; opacity:0; animation:fadeUp 0.9s 0.15s forwards; }
+    .intro-card p { font-size:1.2rem; line-height:1.95; color:#b0c4d8; margin-bottom:0; }
+    .content-section { margin-bottom:2.8rem; opacity:0; animation:fadeUp 0.9s forwards; }
+    .content-section:nth-of-type(1){animation-delay:0.2s} .content-section:nth-of-type(2){animation-delay:0.28s} .content-section:nth-of-type(3){animation-delay:0.36s}
+    .section-heading { font-family:'Roboto',sans-serif; font-size:1.1rem; font-weight:500; color:var(--text); padding-bottom:0.6rem; border-bottom:1px solid var(--border); margin-bottom:1.4rem; }
+    .section-divider { height:1px; background:var(--border); margin:2.5rem 0; }
+    /* doc grid */
+    .doc-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .doc-btn { display:flex; align-items:center; gap:1rem; padding:1.2rem 1.5rem; background:var(--surface); border:1px solid var(--border); color:var(--text); text-decoration:none; font-size:0.95rem; transition:all 0.22s; position:relative; overflow:hidden; }
+    .doc-btn::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent); transform:scaleY(0); transition:transform 0.22s; }
+    .doc-btn:hover { background:var(--surface2); border-color:var(--accent); color:var(--accent); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+    .doc-btn:hover::before { transform:scaleY(1); }
+    .doc-icon { font-size:1.3rem; flex-shrink:0; opacity:0.7; }
+    .doc-btn:hover .doc-icon { opacity:1; }
+    .doc-label { display:flex; flex-direction:column; gap:0.2rem; }
+    .doc-title { font-size:0.9rem; font-weight:400; }
+    .doc-desc { font-size:0.72rem; color:var(--muted); }
+    /* contacts grid */
+    .contacts-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .contact-card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:1.4rem 1.6rem; }
+    .contact-card h3 { font-family:'Roboto',sans-serif; font-size:0.85rem; font-weight:500; color:var(--accent); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.8rem; }
+    .contact-card p { font-size:0.9rem; line-height:1.8; color:#b0c4d8; margin-bottom:0.4rem; }
+    .contact-card a { color:var(--accent); text-decoration:none; font-size:0.88rem; }
+    .contact-card a:hover { text-decoration:underline; }
+    /* warn box */
+    .warn-box { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--warn); padding:1.4rem 1.8rem; margin-bottom:1rem; }
+    .warn-box p { font-size:1.0rem; line-height:1.85; color:#b0c4d8; margin-bottom:0.6rem; }
+    .warn-box p:last-child { margin-bottom:0; }
+    .warn-box ul { list-style:none; padding:0; margin:0.5rem 0; }
+    .warn-box ul li { font-size:1.0rem; line-height:1.85; color:#b0c4d8; padding:0.25rem 0 0.25rem 1.4rem; position:relative; }
+    .warn-box ul li::before { content:'›'; position:absolute; left:0; color:var(--warn); font-size:1.1rem; line-height:1.7; }
+    /* FAQ */
+    .faq-item { border:1px solid var(--border); margin-bottom:0.6rem; overflow:hidden; transition:border-color 0.2s; }
+    .faq-item.open { border-color:var(--accent); }
+    .faq-question { width:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.1rem 1.5rem; background:var(--surface); border:none; color:var(--text); font-family:'Source Sans 3',sans-serif; font-size:1.0rem; font-weight:400; text-align:left; cursor:pointer; transition:background 0.2s,color 0.2s; }
+    .faq-question:hover, .faq-item.open .faq-question { background:var(--surface2); color:var(--accent); }
+    .faq-chevron { flex-shrink:0; font-size:0.75rem; color:var(--accent); transition:transform 0.3s; }
+    .faq-item.open .faq-chevron { transform:rotate(180deg); }
+    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.38s ease,padding 0.25s ease; background:var(--bg); padding:0 1.5rem; }
+    .faq-item.open .faq-answer { max-height:3000px; padding:1.3rem 1.5rem 1.5rem; }
+    .faq-answer p { font-size:0.98rem; line-height:1.9; color:#b0c4d8; margin-bottom:0.9rem; }
+    .faq-answer p:last-child { margin-bottom:0; }
+    .faq-answer ul { list-style:none; padding:0; margin:0.5rem 0 1rem; }
+    .faq-answer ul li { font-size:0.98rem; line-height:1.85; color:#b0c4d8; padding:0.3rem 0 0.3rem 1.4rem; position:relative; }
+    .faq-answer ul li::before { content:'›'; position:absolute; left:0; color:var(--accent); font-size:1.1rem; line-height:1.7; }
+    .faq-answer a { color:var(--accent); text-decoration:none; }
+    .faq-answer a:hover { text-decoration:underline; }
+    .faq-answer strong { color:var(--text); font-weight:500; }
+    .ambulanz-box { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:1.2rem 1.5rem; margin-top:1rem; font-size:0.95rem; line-height:1.85; color:#b0c4d8; }
+    .ambulanz-box a { color:var(--accent); text-decoration:none; }
+    .back-link { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; transition:color 0.2s; margin-top:2rem; }
+    .back-link:hover { color:var(--accent); }
+    footer { border-top:1px solid var(--border); padding:1.8rem 3rem; display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; letter-spacing:0.08em; color:var(--text); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @media(max-width:700px){ nav{padding:1rem 1.2rem;flex-wrap:wrap;gap:0.8rem;} .nav-logo{font-size:0.9rem;max-width:200px;} .nav-links li a{padding:0.4rem 0.65rem;font-size:0.65rem;} .page-wrapper{padding:7.5rem 1.5rem 4rem;} .doc-grid,.contacts-grid{grid-template-columns:1fr;} footer{flex-direction:column;gap:0.5rem;text-align:center;} }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Ambulanz für<br><span>Tiefe Hirnstimulation</span> und Pumpentherapien</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="neuvorsteller.html">Neuvorsteller</a></li>
+      <li><a href="pumpentherapie.html">Pumpentherapie</a></li>
+      <li><a href="tiefe-hirnstimulation.html" class="active">Tiefe Hirnstimulation</a></li>
+      <li><a href="weiteres.html">Weiteres</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </nav>
+  <div class="page-wrapper">
+    <div class="breadcrumb"><a href="tiefe-hirnstimulation.html">Tiefe Hirnstimulation</a><span>›</span><span>Bereits implantierte Schrittmacher</span></div>
+    <div class="page-header">
+      <p class="page-eyebrow">Technische Hilfe &amp; Alltagsfragen</p>
+      <h1 class="page-title">Bereits implantierte Schrittmacher</h1>
+    </div>
+    <div class="intro-card">
+      <p>Sehr geehrte Patientin, sehr geehrter Patient, hier finden Sie alle wichtigen Informationen zu bereits implantierten Schrittmacher-Systemen, Hilfestellung bei technischen Problemen sowie häufig gestellte Fragen zu bereits implantierten Schrittmachern.</p>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="doc-grid">
+        <a href="https://sites.google.com/view/ths-pumpentherapie-tuebingen/tiefe-hirnstimulation/bereits-implantierte-schrittmacher" target="_blank" rel="noopener" class="doc-btn"><span class="doc-icon">📄</span><span class="doc-label"><span class="doc-title">THS Kontakte</span><span class="doc-desc">Kontaktdaten der Hersteller</span></span></a>
+        <a href="https://sites.google.com/view/ths-pumpentherapie-tuebingen/tiefe-hirnstimulation/bereits-implantierte-schrittmacher" target="_blank" rel="noopener" class="doc-btn"><span class="doc-icon">📄</span><span class="doc-label"><span class="doc-title">Boston Scientific Warnhinweise</span><span class="doc-desc">Sicherheitshinweise</span></span></a>
+        <a href="https://sites.google.com/view/ths-pumpentherapie-tuebingen/tiefe-hirnstimulation/bereits-implantierte-schrittmacher" target="_blank" rel="noopener" class="doc-btn"><span class="doc-icon">📄</span><span class="doc-label"><span class="doc-title">Boston Scientific MRT Guidelines</span><span class="doc-desc">MRT-Hinweise für Boston-Geräte</span></span></a>
+        <a href="https://sites.google.com/view/ths-pumpentherapie-tuebingen/tiefe-hirnstimulation/bereits-implantierte-schrittmacher" target="_blank" rel="noopener" class="doc-btn"><span class="doc-icon">📄</span><span class="doc-label"><span class="doc-title">Medtronic Technische Informationen</span><span class="doc-desc">DBS Technische Informationen</span></span></a>
+        <a href="https://sites.google.com/view/ths-pumpentherapie-tuebingen/tiefe-hirnstimulation/bereits-implantierte-schrittmacher" target="_blank" rel="noopener" class="doc-btn"><span class="doc-icon">📄</span><span class="doc-label"><span class="doc-title">Abbott Handbuch</span><span class="doc-desc">IFU Infinity IPG</span></span></a>
+      </div>
+    <div class="section-divider"></div>
+
+    <!-- CONTACTS -->
+    <div class="content-section">
+      <h2 class="section-heading">Ansprechpartner beim Hirnschrittmacher-Hersteller</h2>
+      <div class="contacts-grid">
+        <div class="contact-card">
+          <h3>Medtronic</h3>
+          <p>Hotline: <strong>02159-8149171</strong></p>
+          <p><a href="mailto:rs.pccneuro@medtronic.com">rs.pccneuro@medtronic.com</a></p>
+          <p style="margin-top:0.6rem;font-size:0.8rem;color:var(--muted);">Nur im Notfall:</p>
+          <p>M. Rockert: 0151-122 036 14</p>
+          <p>R. Strauss: 0151-159 093 14</p>
+        </div>
+        <div class="contact-card">
+          <h3>Abbott</h3>
+          <p>A. Hoch: <strong>0172-53 205 53</strong></p>
+          <p>S. Vogelbacher: 0151-19 686 145</p>
+          <p style="margin-top:0.6rem;"><a href="mailto:andreas.hoch@abbott.com">andreas.hoch@abbott.com</a></p>
+          <p style="margin-top:0.4rem;font-size:0.8rem;color:var(--muted);">Handbücher: <a href="https://manuals.eifu.abbott/en/hcp/home.html" target="_blank" rel="noopener">manuals.eifu.abbott</a></p>
+        </div>
+        <div class="contact-card">
+          <h3>Boston Scientific</h3>
+          <p>Hotline (8–16 Uhr):<br><strong>0800 88 025 88</strong></p>
+          <p>M. Manka: 0170 143 75 86</p>
+          <p>Email: Martin.Manka@bsci.com</p>
+          <p>B. Böttger: 0171-33 64 715</p>
+          <p><a href="mailto:bjoern.boettger@bsci.com">bjoern.boettger@bsci.com</a></p>
+          <p style="margin-top:0.4rem;"><a href="https://www.bostonscientific.com/elabeling/ie/en/home.html" target="_blank" rel="noopener">Checklisten &amp; Anleitungen</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- FAQ -->
+    <div class="content-section">
+      <h2 class="section-heading">Häufig gestellte Fragen zu bereits implantierten Schrittmachern</h2>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was passiert, wenn die Batterie endet?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Normalerweise verspüren Patienten keine unmittelbaren Folgen, wenn sich die Batterie ihrem Ende nähert. Das Patienten-Handgerät zeigt dann einen <strong>ERI-Status</strong> (Elective Replacement Indicator) an. In diesem Fall verbleibt eine Reserve von ca. <strong>3 Monaten</strong>. Nehmen Sie frühzeitig Kontakt mit unserer THS-Ambulanz auf, sodass ein elektiver Batteriewechsel geplant werden kann.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Ist der Hirnschrittmacher von außen sichtbar?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Je nach Körperbau kann der Neurostimulator auf der Brust oder am Hals als kleine Ausbuchtung wahrgenommen werden. Da der Stimulator vollständig implantiert ist, ist er im Allgemeinen jedoch nicht sichtbar.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann ich den Hirnschrittmacher selbst ausschalten?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Ja. Bereits kurz nach der OP zeigen wir Ihnen, wie Sie das Patienten-Handgerät bedienen können. Ein An- und Ausschalten ist danach jederzeit möglich.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wie gehe ich bei einem Sturz oder Unfall vor?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Sollten Sie einen Unfall erleiden, bei dem der Kopf ruckartig bewegt wird oder Sie auf den Schrittmacher stürzen und Parkinson-Symptome zurückkehren, melden Sie sich bitte bei unserer Ambulanz oder in der Notaufnahme. Wir prüfen dann, ob die eingelegten Kabel oder das Aggregat einen Schaden erlitten haben.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann ich die Körperscanner am Flughafen passieren?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Bitten Sie das Sicherheitspersonal um eine <strong>manuelle Untersuchung durch Abtasten</strong> und zeigen Sie Ihren Schrittmacherausweis. Sollten Sie dennoch einen Körperscanner passieren müssen, kann der Schrittmacher sicherheitshalber kurz über das Handgerät ausgeschaltet werden.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann ich mit dem Schrittmacher in ein MRT?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Grundsätzlich sind MRT-Untersuchungen auch nach Implantation möglich, sofern bestimmte Bedingungen erfüllt sind. Elektive MRT-Untersuchungen sollten in Rücksprache mit Ihrem THS-Arzt/Ihrer THS-Ärztin erfolgen. Weitere Details finden Sie auf der Seite <a href="ths-mrt.html">MRT bei THS</a>.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann ich mit dem Schrittmacher zur Mammographie oder CT?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Ja. Mit <strong>angeschalteter Stimulation</strong> können sowohl Mammographien als auch Computertomographien durchgeführt werden.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Weitere Alltagshinweise zum Schrittmacher</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Um den Schrittmacher nicht zu beschädigen, beachten Sie bitte:</p>
+          <ul>
+            <li>Kein TENS (Reizstromgerät) benutzen</li>
+            <li>Mobiltelefon nicht direkt auf den Stimulator legen</li>
+            <li>Beim Kochen auf Induktionsherden <strong>30 cm Abstand</strong> halten</li>
+            <li>Vorsicht beim Umgang mit alten Mikrowellen (neue Modelle sind unbedenklich)</li>
+            <li>Kein EMS-Training (Elektro-Myo-Stimulation)</li>
+            <li>Kein TENS benutzen</li>
+          </ul>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Sollte ich meinen Ärzten von meinem Schrittmacher berichten?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Ja, unbedingt. Manche Prozeduren (z. B. EKG, chirurgische Eingriffe) erfordern bei Tiefer Hirnstimulation besondere Vorkehrungen. Informieren Sie Ihren behandelnden Arzt oder Ihre Ärztin stets frühzeitig.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann ich mit eingeschaltetem Gerät operiert werden?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Grundsätzlich sind Operationen auch mit THS möglich. Beim Verwenden von Kauter-Strom zum Verschließen von Wunden darf ausschließlich ein <strong>bipolarer Modus</strong> verwendet werden, sodass der Strom nicht durch den Schrittmacher geleitet wird. Die Erdung sollte möglichst weit vom Schrittmacher entfernt liegen. Zahnärztliche Ultraschallgeräte können bei ausgeschalteter THS verwendet werden. Vor einer geplanten Operation sollten Sie sich mit unserem Zentrum in Verbindung setzen.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Ab wann darf ich duschen?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Um eine Schrittmacherinfektion sicher zu vermeiden, empfehlen wir für <strong>4 Wochen</strong> nach Implantation das Duschen mit einem Duschpflaster bzw. einer Duschhaube. Einzelheiten werden Ihnen direkt nach der OP mitgeteilt.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Führen eines Kraftfahrzeugs nach der OP?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Unmittelbar nach der Operation dürfen Sie für <strong>3 Monate</strong> kein Kraftfahrzeug führen. Danach sollten Sie die Fahrtauglichkeit selbst kritisch prüfen und sich im Zweifel mit Ihrem Neurologen beraten.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was ist mit Sport und Freizeit?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Saunieren und Solarium sind grundsätzlich erlaubt. Thermalbäder sowie Schwimmen sind möglich. Fliegen und Sicherheitskontrollen sind problemlos möglich. Trampolinspringen ist (mit Vorsicht) erlaubt.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was tun, wenn ich mit der Einstellung nicht klarkomme?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Nehmen Sie per Telefon oder E-Mail Kontakt zu unserer Ambulanz auf. Wir melden uns bei Ihnen.</p>
+          <div class="ambulanz-box">
+            Telefonisch erreichbar <strong>Dienstag und Mittwoch 9–11 Uhr</strong><br>
+            Tel: <strong>07071 / 29-85483</strong><br>
+            E-Mail: <a href="mailto:THS-Pumpentherapie@med.uni-tuebingen.de">THS-Pumpentherapie@med.uni-tuebingen.de</a>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wie oft werden die Einstellungen ärztlicherseits kontrolliert?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Die erste Einstellung des Schrittmachers erfolgt ca. <strong>2–3 Monate</strong> nach der Implantation. Danach finden Ambulanzbesuche gewöhnlich alle <strong>6 Monate</strong> statt. Bei Verschlechterungen oder Notfällen sind nach Absprache auch frühere Termine möglich.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Austausch des Stimulator-Handgeräts (Abbott)</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Ihr niedergelassener Neurologe oder Hausarzt kann ein Rezept ausstellen über: <strong>„65600ABT Patientensteuergerät Infinity"</strong>. Zusätzlich wird das Sachkostenformular benötigt (erhältlich bei unserer Ambulanz), welches von Arzt und Patient unterschrieben werden muss. Bitte nehmen Sie Kontakt mit unserer Ambulanz auf, damit wir Ihnen die Versandadresse für das Rezept mitteilen können.</p>
+          <p>Herr Hoch von Abbott schickt Ihnen danach ein neues Handgerät. Nach Erhalt können Sie dieses mit Ihrem Magneten neu koppeln.</p>
+          <ul>
+            <li>A. Hoch: <strong>+49 (0) 172 532 05 53</strong></li>
+            <li><a href="mailto:andreas.hoch@abbott.com">andreas.hoch@abbott.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was passiert mit dem Implantat, wenn ich sterbe?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer"><p>Die häufig geäußerte Sorge, dass der Schrittmacher nach dem Ableben operativ entfernt werden muss, gilt als überholt. Meist erfragt der Bestatter, ob ein implantiertes elektrisches Gerät getragen wurde. Da es keine bundeseinheitlichen Richtlinien gibt und Friedhofssatzungen variieren, können vereinzelt anderslautende Vorgaben bestehen. Eine Einäscherung ist in der Regel problemlos möglich, da moderne Krematorien entsprechende Verbrennungstechniken einsetzen.</p></div>
+      </div>
+    </div>
+
+    <a href="tiefe-hirnstimulation.html" class="back-link">← Zurück zur Tiefen Hirnstimulation</a>
+  </div>
+
+  <footer><span>Ambulanz für Tiefe Hirnstimulation und Pumpentherapien</span><span>PKlocke.github.io</span></footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-question').setAttribute('aria-expanded','false'); });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+      });
+    });
+  </script>
+</body>
+</html>

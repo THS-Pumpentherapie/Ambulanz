@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kontakt – Ambulanz THS &amp; Pumpentherapien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #0b0f14;
+      --surface:   #111720;
+      --surface2:  #161d27;
+      --border:    #1e2a38;
+      --text:      #dde6f0;
+      --muted:     #dde6f0;
+      --accent:    #4a9eca;
+      --accent2:   #2d7fb0;
+      --accent-dim:rgba(74,158,202,0.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,15,20,0.92);
+      backdrop-filter: blur(14px);
+    }
+    .nav-logo {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2rem; font-weight: 400;
+      color: var(--text); text-decoration: none;
+      letter-spacing: 0.02em;
+      max-width: 340px; line-height: 1.2;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links li a {
+      display: block;
+      padding: 0.45rem 1.1rem;
+      font-size: 1rem; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-links li a:hover  { color: var(--accent); border-color: var(--border); background: var(--surface); }
+    .nav-links li a.active { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-dim); }
+
+    /* ── PAGE WRAPPER ── */
+    .page-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 7rem 3rem 5rem;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.1s forwards;
+    }
+    .page-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .page-title {
+      font-family: 'Roboto', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400; line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .page-subtitle {
+      font-size: 1.2rem;
+      line-height: 1.85;
+      color: #b0c4d8;
+    }
+
+    /* ── INFO NOTE ── */
+    .info-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.3rem 1.6rem;
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+      line-height: 1.85;
+      color: #b0c4d8;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s forwards;
+    }
+    .info-note a { color: var(--accent); text-decoration: none; }
+    .info-note a:hover { text-decoration: underline; }
+
+    /* ── FORM ── */
+    .contact-form {
+      opacity: 0;
+      animation: fadeUp 0.9s 0.3s forwards;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.2rem;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    .field-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .field-label .required {
+      color: var(--accent);
+      margin-left: 0.2rem;
+    }
+    .field-label .optional {
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      margin-left: 0.4rem;
+      text-transform: none;
+      font-style: italic;
+    }
+
+    .field-input,
+    .field-select,
+    .field-textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 300;
+      padding: 0.85rem 1.1rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+    .field-input::placeholder,
+    .field-textarea::placeholder { color: var(--muted); }
+    .field-input:focus,
+    .field-select:focus,
+    .field-textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+    .field-input.invalid,
+    .field-textarea.invalid { border-color: #e07b54; }
+
+    .field-textarea {
+      resize: vertical;
+      min-height: 160px;
+      line-height: 1.7;
+    }
+
+    /* date input styling */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.5) sepia(1) saturate(2) hue-rotate(180deg);
+      cursor: pointer;
+    }
+
+    /* ── REQUIRED LEGEND ── */
+    .form-legend {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .form-legend span { color: var(--accent); }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit {
+      width: 100%;
+      padding: 1.1rem;
+      background: var(--accent);
+      color: var(--bg);
+      border: 1px solid var(--accent);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── SUCCESS / ERROR MESSAGES ── */
+    .form-message {
+      display: none;
+      padding: 1.4rem 1.6rem;
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      border: 1px solid;
+    }
+    .form-message.success {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .form-message.error {
+      border-color: #e07b54;
+      background: rgba(224,123,84,0.08);
+      color: #e07b54;
+    }
+
+    /* field error text */
+    .field-error {
+      font-size: 1.1rem;
+      color: #e07b54;
+      margin-top: 0.35rem;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      transition: color 0.2s;
+      margin-top: 2rem;
+      display: block;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.68rem; letter-spacing: 0.08em; color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; flex-wrap: wrap; gap: 0.8rem; }
+      .nav-logo { font-size: 0.9rem; max-width: 200px; }
+      .nav-links li a { padding: 0.4rem 0.65rem; font-size: 0.65rem; }
+      .page-wrapper { padding: 7.5rem 1.5rem 4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      Ambulanz für<br><span>Tiefe Hirnstimulation</span> und Pumpentherapien
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="neuvorsteller.html">Neuvorsteller</a></li>
+      <li><a href="pumpentherapie.html">Pumpentherapie</a></li>
+      <li><a href="tiefe-hirnstimulation.html">Tiefe Hirnstimulation</a></li>
+      <li><a href="weiteres.html">Weiteres</a></li>
+      <li><a href="kontakt.html" class="active">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <p class="page-eyebrow">Schreiben Sie uns</p>
+      <h1 class="page-title">Kontakt</h1>
+      <p class="page-subtitle">
+        Nutzen Sie dieses Formular, um uns eine Nachricht zu senden. Wir melden uns
+        bei Ihnen sobald wie möglich.
+      </p>
+    </div>
+
+    <!-- INFO NOTE -->
+    <div class="info-note">
+      Telefonisch erreichbar sind wir <strong>Dienstag und Mittwoch von 9–11 Uhr</strong>
+      unter <strong>07071 / 29-85483</strong>.
+    </div>
+
+    <!-- FORM -->
+    <form class="contact-form" id="kontakt-form" novalidate>
+
+      <p class="form-legend"><span>*</span> Pflichtfeld</p>
+
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="vorname">
+            Vorname <span class="required">*</span>
+          </label>
+          <input
+            type="text" id="vorname" name="vorname"
+            class="field-input" placeholder="Ihr Vorname"
+            required autocomplete="given-name"
+          >
+          <span class="field-error" id="vorname-error">Bitte geben Sie Ihren Vornamen ein.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="nachname">
+            Nachname <span class="required">*</span>
+          </label>
+          <input
+            type="text" id="nachname" name="nachname"
+            class="field-input" placeholder="Ihr Nachname"
+            required autocomplete="family-name"
+          >
+          <span class="field-error" id="nachname-error">Bitte geben Sie Ihren Nachnamen ein.</span>
+        </div>
+      </div>
+
+      <!-- DOB + Email row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label" for="geburtsdatum">
+            Geburtsdatum <span class="optional">(optional)</span>
+          </label>
+          <input
+            type="date" id="geburtsdatum" name="geburtsdatum"
+            class="field-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="email">
+            E-Mail-Adresse <span class="required">*</span>
+          </label>
+          <input
+            type="email" id="email" name="email"
+            class="field-input" placeholder="ihre@email.de"
+            required autocomplete="email"
+          >
+          <span class="field-error" id="email-error">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
+        </div>
+      </div>
+
+      <!-- Subject -->
+      <div class="form-group">
+        <label class="field-label" for="betreff">
+          Betreff <span class="required">*</span>
+        </label>
+        <input
+          type="text" id="betreff" name="betreff"
+          class="field-input" placeholder="z. B. Neuvorstellung, Terminanfrage, Technisches Problem …"
+          required
+        >
+        <span class="field-error" id="betreff-error">Bitte geben Sie einen Betreff ein.</span>
+      </div>
+
+      <!-- Message -->
+      <div class="form-group">
+        <label class="field-label" for="nachricht">
+          Nachricht
+        </label>
+        <textarea
+          id="nachricht" name="nachricht"
+          class="field-textarea"
+          placeholder="Ihre Nachricht an uns …"
+        ></textarea>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        Nachricht absenden
+      </button>
+
+      <!-- Success message -->
+      <div class="form-message success" id="success-msg">
+        ✓ Ihre Nachricht wurde erfolgreich versendet. Wir melden uns so bald wie möglich bei Ihnen.
+      </div>
+
+      <!-- Error message -->
+      <div class="form-message error" id="error-msg">
+        ✗ Beim Versenden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an
+        <a href="mailto:THS-Pumpentherapie@med.uni-tuebingen.de" style="color:inherit;text-decoration:underline;">THS-Pumpentherapie@med.uni-tuebingen.de</a>.
+      </div>
+
+    </form>
+
+    <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+
+  </div><!-- /page-wrapper -->
+
+  <footer>
+    <span>Ambulanz für Tiefe Hirnstimulation und Pumpentherapien</span>
+    <span>PKlocke.github.io</span>
+  </footer>
+
+  <script>
+    const form = document.getElementById('kontakt-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMsg = document.getElementById('success-msg');
+    const errorMsg = document.getElementById('error-msg');
+
+    // Field validation helpers
+    function showError(fieldId, errorId) {
+      document.getElementById(fieldId).classList.add('invalid');
+      document.getElementById(errorId).classList.add('visible');
+    }
+    function clearError(fieldId, errorId) {
+      document.getElementById(fieldId).classList.remove('invalid');
+      document.getElementById(errorId).classList.remove('visible');
+    }
+
+    // Live validation — clear error as user types
+    ['vorname', 'nachname', 'email', 'betreff'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        clearError(id, id + '-error');
+      });
+    });
+
+    function validateForm() {
+      let valid = true;
+
+      const vorname = document.getElementById('vorname').value.trim();
+      if (!vorname) { showError('vorname', 'vorname-error'); valid = false; }
+      else clearError('vorname', 'vorname-error');
+
+      const nachname = document.getElementById('nachname').value.trim();
+      if (!nachname) { showError('nachname', 'nachname-error'); valid = false; }
+      else clearError('nachname', 'nachname-error');
+
+      const email = document.getElementById('email').value.trim();
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!emailOk) { showError('email', 'email-error'); valid = false; }
+      else clearError('email', 'email-error');
+
+      const betreff = document.getElementById('betreff').value.trim();
+      if (!betreff) { showError('betreff', 'betreff-error'); valid = false; }
+      else clearError('betreff', 'betreff-error');
+
+      return valid;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      if (!validateForm()) return;
+
+      // Build mailto values
+      const vorname   = document.getElementById('vorname').value.trim();
+      const nachname  = document.getElementById('nachname').value.trim();
+      const geb       = document.getElementById('geburtsdatum').value;
+      const email     = document.getElementById('email').value.trim();
+      const betreff   = document.getElementById('betreff').value.trim();
+      const nachricht = document.getElementById('nachricht').value.trim();
+
+      const gebStr = geb
+        ? new Date(geb).toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'})
+        : '—';
+
+      const bodyText =
+        `Name: ${vorname} ${nachname}\n` +
+        `Geburtsdatum: ${gebStr}\n` +
+        `E-Mail: ${email}\n\n` +
+        (nachricht ? `Nachricht:\n${nachricht}` : '');
+
+      const mailtoLink =
+        `mailto:THS-Pumpentherapie@med.uni-tuebingen.de` +
+        `?subject=${encodeURIComponent(betreff)}` +
+        `&body=${encodeURIComponent(bodyText)}`;
+
+      // Open the user's mail client
+      window.location.href = mailtoLink;
+
+      // Show confirmation after short delay
+      setTimeout(() => {
+        successMsg.style.display = 'block';
+        form.reset();
+        submitBtn.disabled = false;
+      }, 800);
+    });
+  </script>
+
+</body>
+</html>

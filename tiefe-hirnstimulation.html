@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tiefe Hirnstimulation – Ambulanz THS &amp; Pumpentherapien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0b0f14; --surface:#111720; --surface2:#161d27;
+      --border:#1e2a38; --text:#dde6f0; --muted:#5a7190;
+      --accent:#4a9eca; --accent-dim:rgba(74,158,202,0.10);
+      --warn:#e07b54;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Source Sans 3',sans-serif; font-weight:300; min-height:100vh; }
+
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.1rem 3rem; border-bottom:1px solid var(--border);
+      background:rgba(11,15,20,0.92); backdrop-filter:blur(14px);
+    }
+    .nav-logo { font-family:'Roboto',sans-serif; font-size:1.2rem; font-weight:400; color:var(--text); text-decoration:none; letter-spacing:0.02em; max-width:340px; line-height:1.3; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:0; list-style:none; }
+    .nav-links li a { display:block; padding:0.45rem 1.1rem; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; border:1px solid transparent; transition:all 0.2s; }
+    .nav-links li a:hover { color:var(--accent); border-color:var(--border); background:var(--surface); }
+    .nav-links li a.active { color:var(--accent); border-color:var(--accent-dim); background:var(--accent-dim); }
+
+    .page-wrapper { max-width:900px; margin:0 auto; padding:7rem 3rem 5rem; }
+
+    .page-header { padding-bottom:2.5rem; border-bottom:1px solid var(--border); margin-bottom:3rem; opacity:0; animation:fadeUp 0.9s 0.1s forwards; }
+    .page-eyebrow { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
+    .page-title { font-family:'Roboto',sans-serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:400; line-height:1.1; }
+
+    /* intro card */
+    .intro-card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:2.2rem 2.5rem; margin-bottom:3rem; opacity:0; animation:fadeUp 0.9s 0.2s forwards; }
+    .intro-card h2 { font-family:'Roboto',sans-serif; font-size:1.15rem; font-weight:500; color:var(--accent); margin-bottom:1.2rem; }
+    .intro-card p { font-size:1.2rem; line-height:1.95; color:#b0c4d8; margin-bottom:1rem; }
+    .intro-card p:last-child { margin-bottom:0; }
+
+    /* sub-buttons */
+    .sub-buttons-section { margin-bottom:3rem; opacity:0; animation:fadeUp 0.9s 0.3s forwards; }
+    .buttons-intro { font-size:1.05rem; color:var(--text); margin-bottom:1.8rem; line-height:1.7; }
+    .sub-btn-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .sub-btn {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:0.6rem; padding:2rem 1.5rem;
+      background:var(--surface); border:1px solid var(--border);
+      color:var(--text); text-decoration:none;
+      font-family:'Roboto',sans-serif; font-size:1.05rem; font-weight:400;
+      text-align:center; transition:all 0.22s; position:relative; overflow:hidden;
+    }
+    .sub-btn::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent); transform:scaleY(0); transition:transform 0.22s; }
+    .sub-btn:hover { background:var(--surface2); border-color:var(--accent); color:var(--accent); transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,0.35), 0 0 0 1px var(--accent-dim); }
+    .sub-btn:hover::before { transform:scaleY(1); }
+    .sub-btn-icon { font-size:1.8rem; opacity:0.6; transition:opacity 0.2s; }
+    .sub-btn:hover .sub-btn-icon { opacity:1; }
+    .sub-btn-label { font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); }
+    .sub-btn:hover .sub-btn-label { color:var(--accent); }
+
+    .section-divider { height:1px; background:var(--border); margin:2.5rem 0; }
+    .content-section { margin-bottom:2.8rem; opacity:0; animation:fadeUp 0.9s forwards; }
+    .content-section:nth-of-type(1){animation-delay:0.38s}
+    .content-section:nth-of-type(2){animation-delay:0.46s}
+    .section-heading { font-family:'Roboto',sans-serif; font-size:1.1rem; font-weight:500; color:var(--text); padding-bottom:0.6rem; border-bottom:1px solid var(--border); margin-bottom:1.4rem; }
+
+    /* FAQ */
+    .faq-item { border:1px solid var(--border); margin-bottom:0.6rem; overflow:hidden; transition:border-color 0.2s; }
+    .faq-item.open { border-color:var(--accent); }
+    .faq-question { width:100%; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.1rem 1.5rem; background:var(--surface); border:none; color:var(--text); font-family:'Source Sans 3',sans-serif; font-size:1.0rem; font-weight:400; text-align:left; cursor:pointer; transition:background 0.2s,color 0.2s; }
+    .faq-question:hover, .faq-item.open .faq-question { background:var(--surface2); color:var(--accent); }
+    .faq-chevron { flex-shrink:0; font-size:0.75rem; color:var(--accent); transition:transform 0.3s; }
+    .faq-item.open .faq-chevron { transform:rotate(180deg); }
+    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.38s ease,padding 0.25s ease; background:var(--bg); padding:0 1.5rem; }
+    .faq-item.open .faq-answer { max-height:3000px; padding:1.3rem 1.5rem 1.5rem; }
+    .faq-answer p { font-size:0.98rem; line-height:1.9; color:#b0c4d8; margin-bottom:0.9rem; }
+    .faq-answer p:last-child { margin-bottom:0; }
+    .faq-answer ul { list-style:none; padding:0; margin:0.5rem 0 1rem; }
+    .faq-answer ul li { font-size:0.98rem; line-height:1.85; color:#b0c4d8; padding:0.3rem 0 0.3rem 1.4rem; position:relative; }
+    .faq-answer ul li::before { content:'›'; position:absolute; left:0; color:var(--accent); font-size:1.1rem; line-height:1.7; }
+    .faq-answer a { color:var(--accent); text-decoration:none; }
+    .faq-answer a:hover { text-decoration:underline; }
+    .faq-answer strong { color:var(--text); font-weight:500; }
+
+    .contact-box { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); padding:1.2rem 1.5rem; margin-top:1rem; font-size:0.95rem; line-height:1.85; color:#b0c4d8; }
+    .contact-box a { color:var(--accent); text-decoration:none; }
+    .contact-box a:hover { text-decoration:underline; }
+
+    .back-link { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text); text-decoration:none; transition:color 0.2s; margin-top:2rem; }
+    .back-link:hover { color:var(--accent); }
+
+    footer { border-top:1px solid var(--border); padding:1.8rem 3rem; display:flex; justify-content:space-between; align-items:center; font-size:0.68rem; letter-spacing:0.08em; color:var(--text); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    @media(max-width:700px){
+      nav{padding:1rem 1.2rem;flex-wrap:wrap;gap:0.8rem;}
+      .nav-logo{font-size:0.9rem;max-width:200px;}
+      .nav-links li a{padding:0.4rem 0.65rem;font-size:0.65rem;}
+      .page-wrapper{padding:7.5rem 1.5rem 4rem;}
+      .sub-btn-grid{grid-template-columns:1fr;}
+      footer{flex-direction:column;gap:0.5rem;text-align:center;}
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Ambulanz für<br><span>Tiefe Hirnstimulation</span> und Pumpentherapien</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="neuvorsteller.html">Neuvorsteller</a></li>
+      <li><a href="pumpentherapie.html">Pumpentherapie</a></li>
+      <li><a href="tiefe-hirnstimulation.html" class="active">Tiefe Hirnstimulation</a></li>
+      <li><a href="weiteres.html">Weiteres</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <p class="page-eyebrow">Neurochirurgische Therapie</p>
+      <h1 class="page-title">Tiefe Hirnstimulation</h1>
+    </div>
+
+    <div class="intro-card">
+      <h2>Willkommen im Bereich Tiefe Hirnstimulation</h2>
+      <p>Wir verstehen, dass der Umgang mit einer Tiefen Hirnstimulation eine Vielzahl von Fragen aufwerfen kann. Diese Rubrik wurde speziell für Sie erstellt, um Antworten auf häufig gestellte Fragen zu geben und Ihnen dabei zu helfen, sich besser über die Tiefe Hirnstimulation zu informieren.</p>
+      <p>
+    </div>
+
+    <!-- THREE BUTTONS -->
+    <div class="sub-buttons-section">
+      <p class="buttons-intro">Klicken Sie auf eine der Flächen, um nähere Informationen und ggf. technische Hilfe zu Ihrem Hirnschrittmacher zu erhalten</p>
+      <div class="sub-btn-grid">
+        <a href="ths-schrittmacher.html" class="sub-btn">
+          <span class="sub-btn-icon"></span>
+          <span>Bereits implantierte Schrittmacher</span>
+          <span class="sub-btn-label">Alltagsfragen &amp; technische Hinweise</span>
+        </a>
+        <a href="ths-eri-eos.html" class="sub-btn">
+          <span class="sub-btn-icon"></span>
+          <span>Batterieende & Aggregatwechsel</span>
+          <span class="sub-btn-label">ERI- &amp; EOS-Status</span>
+        </a>
+        <a href="ths-mrt.html" class="sub-btn">
+          <span class="sub-btn-icon"></span>
+          <span>MRT bei THS</span>
+          <span class="sub-btn-label">MRT-Prozess &amp; Formulare</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- FAQ -->
+    <div class="content-section">
+      <h2 class="section-heading">Häufig gestellte Fragen zur Tiefen Hirnstimulation</h2>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was versteht man unter Tiefer Hirnstimulation (THS)?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Das Wort „Tiefe" beschreibt die Stimulation von tiefer liegenden Gehirnstrukturen – insbesondere der Basalganglien, einer Kette von Nervenkernen, die bei der Parkinson-Krankheit, der Dystonie und dem Essentiellen Tremor eine wichtige Rolle spielen. Der Strom wird über zwei Elektroden verabreicht, die operativ in das Gebiet des jeweiligen Nervenkerns vorgeschoben werden. Der Strom wird über einen <strong>Impulsgenerator (IPG)</strong> erzeugt, der üblicherweise unterhalb des Schlüsselbeins unter die Haut implantiert und mit den Elektroden über ein dünnes Kabel verbunden wird.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wie wirkt die Tiefe Hirnstimulation?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Bis heute ist die genaue Wirkweise der THS nicht vollständig geklärt. Die THS arbeitet über eine kontinuierliche hochfrequente elektrische Stimulation von Kerngebieten des Gehirns. Es wird angenommen, dass diese Stimulation eine Hemmung des Kerngebietes bewirkt, die sich auf das gesamte Netzwerk der Basalganglien auswirkt.</p>
+          <p>Wichtig: Die THS ist eine <strong>symptomatische Behandlung</strong> – sie reduziert Symptome, hat aber keinen Einfluss auf das Voranschreiten der Erkrankung. Der Effekt ist auch reversibel: Nach Ausschalten des Stimulators stellt sich der Zustand ein, der zu diesem Zeitpunkt ohne Stimulation bestehen würde.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wann ist der richtige Zeitpunkt für eine Tiefe Hirnstimulation?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Bei der Parkinson-Krankheit sollte mit dem Beginn von motorischen und nicht-motorischen Wirkungsfluktuationen über weiterführende Maßnahmen nachgedacht werden. Heute weiß man, dass die Wirksamkeit und die Lebensqualität bei frühem Beginn der Stimulation deutlich besser ist als zu einem späteren Zeitpunkt. Patienten können damit länger im Beruf verbleiben und mehr Jahre in besserer Beweglichkeit verbringen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wer würde nicht von einer Tiefen Hirnstimulation profitieren?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+         <p><strong>Keine Tiefe Hirnstimulation bei:</strong></p>
+          <ul>
+            <li>Atypischen Parkinson-Syndromen (MSA, PSP, CBS)</li>
+            <li>Ausgeprägter Demenz</li>
+            <li>Mittelgradiger bis schwerer Depression</li>
+            <li>Bestimmten psychiatrischen Vorerkrankungen</li>
+            <li>Hohem Alter (>75 Jahre)</li>
+            <li>Sehr langer Krankheitsdauer</li>
+            <li>Signifikanten strukturellen Auffälligkeiten in der MRT-Bildgebung</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Bei welchen Erkrankungen kommt die Tiefe Hirnstimulation in Frage?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Grundsätzlich kommt die Tiefe Hirnstimulation bei der <strong>Parkinson-Krankheit</strong>, dem <strong>Essentiellen Tremor</strong> und der <strong>Dystonie</strong> in Frage. An unserem Zentrum ist sie darüber hinaus auch bei orthostatischem Tremor, Holmes-Tremor und Epilepsie zum Einsatz gekommen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was wollen wir mit der Tiefen Hirnstimulation erreichen?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <ul>
+            <li>Deutliche Verbesserung der Wirkungsschwankungen und gleichmäßigere Beweglichkeit</li>
+            <li>Deutliche Verbesserung des Tremors</li>
+            <li>Verringerung der bisherigen Medikamente</li>
+            <li>Erhalt der Selbständigkeit</li>
+            <li>Verhinderung der Pflegebedürftigkeit</li>
+            <li>Vermeidung von Folgeerkrankungen</li>
+            <li>Erhalt und Wiedergewinnung von Lebensqualität</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Erfolgsaussichten bei Essentiellem Tremor und Dystonie</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <ul>
+            <li>Die Tiefe Hirnstimulation zeigt beim Essentiellen Tremor ein gutes Ansprechen.</li>
+            <li>Bei den Dystonie-Formen (fokale vs. generalisierte Dystonie) können die Erfolgsraten aufgrund der Krankheitsursache und unterschiedlicher Symptomausprägung variieren.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Gibt es eine Altersgrenze für die Tiefe Hirnstimulation?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Vor Jahren galt noch eine Obergrenze von ca. 70 Jahren. Heute weiß man, dass der Einsatz auch weit darüber hinaus zu Erfolg führen kann. Bei Patienten über 70 wird die Entscheidung individuell getroffen und berücksichtigt Vorerkrankungen, Symptomlast und andere Faktoren.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Gibt es Vorerkrankungen, die eine Stimulation ausschließen?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Wir raten von einer Stimulation ab bei Vorliegen eines <strong>atypischen Parkinson-Syndroms</strong> (MSA, PSP, CBS) oder bei einer <strong>mittelgradig bis stark ausgeprägten, nicht kontrollierbaren psychiatrischen Erkrankung</strong> (z. B. schwere Depression, schwere Demenz).</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Allgemeine Risiken der OP und der Tiefen Hirnstimulation</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p><strong>Operative Risiken:</strong></p>
+          <ul>
+            <li>Symptomatische Blutungen</li>
+            <li>Infektionen des Stimulators</li>
+          </ul>
+          <p><strong>Stimulations- und medikamentenbedingte Nebenwirkungen:</strong></p>
+          <ul>
+            <li>Apathie und Depression</li>
+            <li>Leichte Störungen der Wortflüssigkeit</li>
+            <li>Gewichtszunahme</li>
+            <li>Soziale Maladaptation</li>
+          </ul>
+          <p style="font-size:0.82rem;color:var(--muted);">Quelle: Deutsche Gesellschaft für Neurologie (DGN) (2023) S3-Leitlinie: Idiopathisches Parkinson-Syndrom</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Gibt es Unterschiede bei Hardware und Herstellern?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Bei den in Deutschland verfügbaren Herstellern (Abbott, Boston Scientific, Medtronic) gibt es kleinere Unterschiede zwischen den einzelnen Schrittmachern. Die Wirkweise ist bei allen gleich, sodass zum aktuellen Zeitpunkt keine wesentlichen Nachteile eines bestimmten Herstellers bestehen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Bin ich nach der OP körperlich eingeschränkt?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Bis zum vollständigen Verschluss der Wunden sollte das Heben schwerer Gegenstände (> 10 kg) sowie körperliche Ertüchtigung (Schwimmen, Ausdauersport, Kontaktsport) für <strong>3 Wochen</strong> nach der OP vermieden werden. Sobald alle Wunden verschlossen sind, können Sie Ihren gewohnten Alltag mit wenigen Einschränkungen fortführen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Was sind die Langzeit-Ergebnisse der Tiefen Hirnstimulation?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Die Effekte der Tiefen Hirnstimulation sind auch weit über <strong>10 Jahre nach der OP</strong> zu spüren. Ein Voranschreiten der Erkrankung kann hierdurch jedoch nicht verhindert werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Kann die Tiefe Hirnstimulation das Hirngewebe schädigen?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Das Nervengewebe des Gehirns wird durch die elektrische Stimulation nicht beschädigt. Lediglich bei der Implantation kann ein geringer Teil des Hirngewebes aufgrund des Eingriffs betroffen werden – die Folgen sind jedoch in aller Regel vernachlässigbar.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Verhindert die THS zukünftige Behandlungsmöglichkeiten?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Nein. Die THS hindert Sie nicht daran, zukünftige Therapieoptionen in Anspruch zu nehmen. Die THS ist <strong>reversibel</strong> – das System kann bei Bedarf wieder entfernt werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Eignet sich die THS-Therapie nur zur Behandlung eines Tremors?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Nein. Die THS wirkt auch bei Steifheit und eingeschränkter Motorik und kann eine Linderung bei dystonen Muskelkrämpfen sowie bei nicht-motorischen Symptomen wie Schlafstörungen und Harnwegssymptomen verschaffen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Ist die THS-Therapie der „letzte Ausweg" bei Parkinson?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Auf keinen Fall. Das günstige Zeitfenster umfasst den Zeitraum, in dem Parkinson-Patienten zwar nicht mehr so gut auf Medikamente ansprechen wie zuvor, die Medikamente aber grundsätzlich noch eine Wirkung zeigen. Wenn Patienten zu lange warten, schließt sich dieses Zeitfenster. Weltweit sind <strong>mehr als 175.000 Personen</strong> mit der THS behandelt worden – seit mehr als 30 Jahren.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wie lange dauert es, bis die THS nach der Implantation wirkt?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Das THS-System wird bereits kurz nach der OP leicht aktiviert. Unter Umständen tritt bereits eine Linderung der Symptome ein. Optimale Ergebnisse werden normalerweise jedoch erst nach <strong>mehreren Programmiersitzungen</strong> mit einem Arzt oder einer Pflegekraft erzielt.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Spüre ich die Stimulation?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Viele Patienten bemerken die Stimulation überhaupt nicht. Manche spüren ein kurzes Kribbeln bei der ersten Aktivierung. Falls das Gefühl sich verändert oder unangenehm wird, sollten Sie umgehend Ihren Arzt kontaktieren.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Ist die THS-Therapie dauerhaft immer gleich?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Nein. Die THS-Therapie ist <strong>anpassbar</strong> – die Stimulation kann im Laufe der Zeit neu eingestellt werden, um eine gute Symptomkontrolle aufrechtzuerhalten. Bei Bedarf kann das System auch ausgeschaltet oder entfernt werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Bedeutet die THS, dass ich keine Parkinson-Medikamente mehr brauche?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Nein. Ziel ist nicht, die Medikamente vollständig abzusetzen, sondern das Ausmaß (Häufigkeit und Dosis) der medikamentösen Therapie zu verringern. Grundsätzlich müssen jedoch weiterhin Parkinson-Medikamente eingenommen werden.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Wird die THS das Voranschreiten meiner Erkrankung verhindern?</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Die THS ist kein Heilmittel für Bewegungsstörungen und wird das Fortschreiten der Erkrankung nicht aufhalten. Ziel ist es, die Lebensqualität zu steigern, Symptome über einen längeren Zeitraum zu kontrollieren und medikamentöse Nebenwirkungen zu reduzieren.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false"><span>Weitere nützliche Informationen</span><span class="faq-chevron">▼</span></button>
+        <div class="faq-answer">
+          <p>Weitere Informationen der Arbeitsgemeinschaft Tiefe Hirnstimulation:</p>
+          <ul>
+            <li><a href="https://www.tiefehirnstimulation.de/fragen-und-antworten/#toc_Zusammenfassung_Indikation_Parkinson" target="_blank" rel="noopener">www.tiefehirnstimulation.de – Fragen und Antworten</a></li>
+          </ul>
+          <div class="contact-box">
+            Telefonisch erreichbar <strong>Dienstag und Mittwoch 9–11 Uhr</strong><br>
+            Tel: <strong>07071 / 29-85483</strong><br>
+            E-Mail: <a href="mailto:THS-Pumpentherapie@med.uni-tuebingen.de">THS-Pumpentherapie@med.uni-tuebingen.de</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /faq -->
+
+    <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+
+  </div>
+
+  <footer>
+    <span>Ambulanz für Tiefe Hirnstimulation und Pumpentherapien</span>
+    <span>PKlocke.github.io</span>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-question').setAttribute('aria-expanded','false'); });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+      });
+    });
+  </script>
+</body>
+</html>
